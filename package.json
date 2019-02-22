@@ -1,0 +1,32 @@
+{
+  "name": "machine-learning",
+  "version": "1.0.0",
+  "description": "Learning Machine Learning kaka",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heitorcaldeira/machine-learning.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/heitorcaldeira/machine-learning/issues"
+  },
+  "homepage": "https://github.com/heitorcaldeira/machine-learning#readme",
+  "dependencies": {
+    "@tensorflow/tfjs": "^0.15.2",
+    "@tensorflow/tfjs-node": "^0.3.0",
+    "csvtojson": "^2.0.8",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-typescript": "^7.1.0"
+  }
+}

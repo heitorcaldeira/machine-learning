@@ -20,7 +20,7 @@ app.get('/predict/:x1/:x2/:x3/:x4', (req, res) => {
 })
 
 
-csv().fromFile('iris-train.csv')
+csv().fromFile('numbers-train.csv')
 .then((jsonObj)=>{
     train(jsonObj)
 })
@@ -28,19 +28,15 @@ csv().fromFile('iris-train.csv')
 
 //training
 function train(data) {
-    const trainingData = tf.tensor2d(data.map(item => [parseFloat(item.SepalLengthCm), parseFloat(item.SepalWidthCm), parseFloat(item.PetalLengthCm), parseFloat(item.PetalWidthCm)]))
-    const labels = tf.tensor2d(data.map(data => [
-        data.Species == 'Iris-setosa' ? 1 : 0,
-        data.Species == 'Iris-versicolor' ? 1 : 0,
-        data.Species == 'Iris-virginica' ? 1 : 0,
-    ]))
+    const trainingData = tf.tensor2d(data.map(item => [parseInt(item.valor)]))
+    const labels = tf.tensor2d(data.map(data => [parseInt(data.label)]))
     
     network(trainingData, labels)
 }
 
 //testing
 function test(data) {
-    const trainingData = tf.tensor2d(data.map(item => [parseFloat(item.SepalLengthCm), parseFloat(item.SepalWidthCm), parseFloat(item.PetalLengthCm), parseFloat(item.PetalWidthCm)]))
+    const trainingData = tf.tensor2d(data.map(item => [parseInt(item.valor)]))
     
     return trainingData
 }
@@ -48,36 +44,36 @@ function test(data) {
 function network(trainingData, labels) {
     tf.tidy(() => {
         model.add(tf.layers.dense({
-            inputShape: [4],
-            activation: "sigmoid",
-            units: 4
+            inputShape: [1],
+            activation: "linear",
+            units: 5
         }))
         
         model.add(tf.layers.dense({
-            inputShape: [4],
-            activation: "sigmoid",
-            units: 4
+            inputShape: [5],
+            activation: "linear",
+            units: 5
         }))
 
         model.add(tf.layers.dense({
-            inputShape: [4],
-            activation: "sigmoid",
-            units: 3
+            inputShape: [5],
+            activation: "linear",
+            units: 5
         }))
         
         
         model.add(tf.layers.dense({
-            activation: "tanh",
-            units: 3
+            activation: "linear",
+            units: 1
         }))
         
         model.compile({
             loss: "meanSquaredError",
-            optimizer: tf.train.adam(.06)
+            optimizer: tf.train.adam(.01)
         })
         
-        model.fit(trainingData, labels, {epochs: 500}).then((history) => {
-            csv().fromFile('iris-test.csv')
+        model.fit(trainingData, labels, {epochs: 400}).then((history) => {
+            csv().fromFile('numbers-test.csv')
             .then((jsonObj)=>{
                 model.predict(test(jsonObj)).print()
             })

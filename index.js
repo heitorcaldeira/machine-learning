@@ -7,16 +7,10 @@ const app = express()
 const model = tf.sequential()
 
 app.listen(3000)
-app.get('/predict/:x1/:x2/:x3/:x4', (req, res) => {
-    console.log(req.params.x1, req.params.x2, req.params.x3, req.params.x4);
-    let predict = model.predict(tf.tensor2d([[parseFloat(req.params.x1), parseFloat(req.params.x2), parseFloat(req.params.x3), parseFloat(req.params.x4)]]));
-    let output = {
-        'Iris-setosa': (predict.get(0, 0) * 100),
-        'Iris-versicolor': (predict.get(0, 1) * 100),
-        'Iris-virginica': (predict.get(0, 2) * 100)
-    }
-    
-    res.json(output);
+app.get('/predict/:x1', (req, res) => {
+    let predict = model.predict(tf.tensor2d([[parseInt(req.params.x1)]]));
+
+    res.json({predict: Math.round(predict.get(0, 0))});
 })
 
 
